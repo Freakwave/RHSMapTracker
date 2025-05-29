@@ -50,9 +50,14 @@
                 <ListBox ItemsSource="{Binding DisplayableDogTracks}" 
                 SelectedItem="{Binding SelectedDogTrackForInfo, Mode=TwoWay}"
                 Grid.Row="0" Grid.Column="1" Margin="5">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background" Value="{Binding DogColorBrush, Converter={StaticResource ColorConverter}}"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding DisplayName}" Foreground="{Binding DogColorBrush, Converter={StaticResource ColorConverter}}">
+                            <TextBlock Text="{Binding DisplayName}" Foreground="{Binding ContrastDogColorBrush, Converter={StaticResource ColorConverter}}" Padding="5">
                                 <TextBlock.InputBindings>
                                     <MouseBinding MouseAction="LeftDoubleClick"
                                   Command="{Binding DataContext.ShowDogInfoWindowCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
