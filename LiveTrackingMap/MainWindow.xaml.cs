@@ -36,5 +36,14 @@ namespace LiveTrackingMap
                 viewModel.TogglePolygonEdit();
             }
         }
+
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+            if (this.DataContext is MainViewModel viewModel)
+            {
+                viewModel.ShowDogInfoWindowCommand.Execute(viewModel.SelectedDogTrackForInfo);
+            }
+        }
     }
 }

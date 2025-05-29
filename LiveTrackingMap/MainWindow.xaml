@@ -53,17 +53,12 @@
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Background" Value="{Binding DogColorBrush, Converter={StaticResource ColorConverter}}"/>
+                            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick" />
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding DisplayName}" Foreground="{Binding ContrastDogColorBrush, Converter={StaticResource ColorConverter}}" Padding="5">
-                                <TextBlock.InputBindings>
-                                    <MouseBinding MouseAction="LeftDoubleClick"
-                                  Command="{Binding DataContext.ShowDogInfoWindowCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                  CommandParameter="{Binding}"/>
-                                </TextBlock.InputBindings>
-                            </TextBlock>
+                            <TextBlock Text="{Binding DisplayName}" Foreground="{Binding ContrastDogColorBrush, Converter={StaticResource ColorConverter}}" Padding="5" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
