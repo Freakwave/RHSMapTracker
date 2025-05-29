@@ -1,0 +1,75 @@
+﻿<Window x:Class="LiveTrackingMap.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LiveTrackingMap"
+        xmlns:mapsui="clr-namespace:Mapsui.UI.Wpf;assembly=Mapsui.UI.Wpf"
+        mc:Ignorable="d"
+        Title="Garmin Live Tracker" Height="700" Width="900" KeyUp="Window_KeyUp">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:CoordinateConverter x:Key="CoordinateConverter" />
+            <local:ColorConverter x:Key="ColorConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Polygon" Command="{Binding TogglePolygonEditCommand}" />
+        </Menu>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" Margin="5,0"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Margin="5,0">
+                    <Run Text="Main Device: "/>
+                    <Run Text="{Binding CurrentPvtData.LatitudeDegrees, StringFormat={}{0:F5}°N, FallbackValue='--', Mode=OneWay}"/>
+                    <Run Text="{Binding CurrentPvtData.LongitudeDegrees, StringFormat={}{0:F5}°E, FallbackValue='--', Mode=OneWay}"/>
+                    <Run Text=" | UTM: "/>
+                    <Run Text="{Binding CurrentUtmString, FallbackValue='N/A'}"/>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Row="0" Grid.Column="0">
+                <ListBox ItemsSource="{Binding DisplayableDogTracks}" 
+                SelectedItem="{Binding SelectedDogTrackForInfo, Mode=TwoWay}"
+                Grid.Row="0" Grid.Column="1" Margin="5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" Foreground="{Binding DogColorBrush, Converter={StaticResource ColorConverter}}">
+                                <TextBlock.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                  Command="{Binding DataContext.ShowDogInfoWindowCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding}"/>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+            <GridSplitter Grid.Row="0" Grid.Column="1"  Margin="2,0,2,0"
+                  Width="3" 
+                  VerticalAlignment="Stretch" 
+                  HorizontalAlignment="Center" />
+            <mapsui:MapControl Grid.Row="0" Grid.Column="2" x:Name="MyMapControl" />
+        </Grid>
+
+
+    </DockPanel>
+</Window>
